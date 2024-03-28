@@ -79,3 +79,25 @@ function blockyFace(thinness_value) {
   ellipse(-2, -4, 1);
   ellipse( 2, -4, 1);
 }
+
+function blobFace(rotation, circle1_size, circle2_size, circle_distance, hue, eye_selection, mouth_selection) {
+  // blob circles
+  push();
+  colorMode(HSB, 300);
+  strokeWeight(0);
+  rotate(rotation);
+  fill(0);
+  blobCircles(circle1_size,  circle2_size, circle_distance, 0.5);
+  fill(hue, 300, 300);
+  blobCircles(circle1_size, circle2_size, circle_distance, 0);
+
+  pop();
+  
+}
+
+function blobCircles(circle1_size, circle2_size, circle_distance, circle_scale_offset) {
+  ellipseMode(RADIUS);
+  ellipse(0, 0, circle_distance/2 + circle_scale_offset);
+  ellipse(-circle_distance/2, 0, circle1_size + circle_scale_offset);
+  ellipse(circle_distance/2, 0, circle2_size + circle_scale_offset);
+}
