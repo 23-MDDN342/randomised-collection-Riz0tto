@@ -70,7 +70,6 @@ function draw () {
         scale(w/25, h/25);
         
         orangeAlienFace(tilt_value, eye_value, mouth_value);
-        blobFace(0, 20, 10, 50, 0, 0, 0);
         pop();
       
     }
