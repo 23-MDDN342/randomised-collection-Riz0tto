@@ -26,7 +26,7 @@ function changeRandomSeed() {
 }
 
 // global variables for colors
-const bg_color1 = [71, 222, 219]
+const bg_color1 = [200, 200, 200]
 
 function mouseClicked() {
   changeRandomSeed();
@@ -51,38 +51,14 @@ function draw () {
     for(let j=0; j<7; j++) {
       let y = h/2 + h*i;
       let x = w/2 + w*j;
-      if (i == 0) {
-        // center face
-        let eye_value = 2;
-        let tilt_value = random(-45, 45);
-        let mouth_value = random(1, 3);
-        let is_cyclops = random(0, 100);
-        if(is_cyclops < 10) {
-          eye_value = 1;
-          tilt_value = random(-5, 5);
-          mouth_value = random(5, 10);
-        }
-        push();
-        translate(x, y);
-        scale(w/25, h/25);
-        //orangeAlienFace(tilt_value, eye_value, mouth_value);
-        blobFace(random(360), random(1, 5), random(1, 5), random(1, 7), random(300), 0, 0);
-        pop();
-      }
-      else if (i > 0) {
-        // all other faces
-        push();
-        translate(x, y);
-        scale(w/25, h/25);
-        if((i+j)%2 == 0) {
-          simplePurpleFace();
-        }
-        else {
-          thinness_value = random(0, 100);
-          blockyFace(thinness_value);
-        }
-        pop();
-      }
+
+      push();
+      translate(x, y);
+      scale(w/25, h/25);
+
+      blobFace(random(360), random(2, 4), random(2, 4), random(3, 5), random(300), 0, 0);
+      pop();
+
     }
   }
 }

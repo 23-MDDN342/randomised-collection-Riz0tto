@@ -14,70 +14,70 @@
  * mouth_value is how open the mouth is and should generally range from 0.5 to 10
  */
 function orangeAlienFace(tilt_value, eye_value, mouth_value) {
-  const bg_color3 = [71, 222, 219];
-  const fg_color3 = [255, 93, 35];
+//   const bg_color3 = [71, 222, 219];
+//   const fg_color3 = [255, 93, 35];
 
-  let headSize = 20
-  let eyeSize = 5;
-  let centerX = 0;
-  let Iy = -4
-  let distactBetweenEyes = 5
-  let MouthDrop = 7
+//   let headSize = 20
+//   let eyeSize = 5;
+//   let centerX = 0;
+//   let Iy = -4
+//   let distactBetweenEyes = 5
+//   let MouthDrop = 7
   
-  // rotation in degrees
-  angleMode(DEGREES);
-  rotate(tilt_value);
+//   // rotation in degrees
+//   angleMode(DEGREES);
+//   rotate(tilt_value);
 
- // head
-  noStroke();
-  fill(fg_color3);
-  ellipse(centerX, 0, headSize, headSize);
+//  // head
+//   noStroke();
+//   fill(fg_color3);
+//   ellipse(centerX, 0, headSize, headSize);
 
-  // 2 traditonal eyes
-  if (eye_value === 1 || eye_value == 3) {
-    fill(bg_color3);
-    ellipse(centerX, Iy, eyeSize-1,eyeSize);
+//   // 2 traditonal eyes
+//   if (eye_value === 1 || eye_value == 3) {
+//     fill(bg_color3);
+//     ellipse(centerX, Iy, eyeSize-1,eyeSize);
    
-  }
-// middle eye
-  if (eye_value >= 2) {
-    fill(bg_color3);
-    ellipse(centerX - distactBetweenEyes, Iy, eyeSize);
-    ellipse(centerX + distactBetweenEyes, Iy, eyeSize );
-  }
+//   }
+// // middle eye
+//   if (eye_value >= 2) {
+//     fill(bg_color3);
+//     ellipse(centerX - distactBetweenEyes, Iy, eyeSize);
+//     ellipse(centerX + distactBetweenEyes, Iy, eyeSize );
+//   }
 
-  // mouth
-  fill(bg_color3);
-  ellipse(centerX, Iy + MouthDrop, distactBetweenEyes, mouth_value);
+//   // mouth
+//   fill(bg_color3);
+//   ellipse(centerX, Iy + MouthDrop, distactBetweenEyes, mouth_value);
 }
 
 
 function simplePurpleFace() {
-  fill(234, 122, 244);
-  noStroke();
-  // head
-  ellipse(0, 0, 20);
-  // eyes
-  fill(255, 217, 114);
-  ellipse(-3, -3, 3);
-  ellipse( 3, -3, 3);
+  // fill(234, 122, 244);
+  // noStroke();
+  // // head
+  // ellipse(0, 0, 20);
+  // // eyes
+  // fill(255, 217, 114);
+  // ellipse(-3, -3, 3);
+  // ellipse( 3, -3, 3);
 }
 
 /*
  * thinness_value ranges from 0-100 and indicates how thin the face is
  */
 function blockyFace(thinness_value) {
-  // head
-  noStroke();
-  fill(134, 19, 136);
-  let head_width = map(thinness_value, 0, 100, 8, 20);
-  rect(-head_width/2, -9, head_width, 18);
+  // // head
+  // noStroke();
+  // fill(134, 19, 136);
+  // let head_width = map(thinness_value, 0, 100, 8, 20);
+  // rect(-head_width/2, -9, head_width, 18);
  
 
-  // eyes
-  fill(234, 122, 244);
-  ellipse(-2, -4, 1);
-  ellipse( 2, -4, 1);
+  // // eyes
+  // fill(234, 122, 244);
+  // ellipse(-2, -4, 1);
+  // ellipse( 2, -4, 1);
 }
 
 function blobFace(rotation, circle1_size, circle2_size, circle_distance, hue, eye_selection, mouth_selection) {
@@ -87,17 +87,21 @@ function blobFace(rotation, circle1_size, circle2_size, circle_distance, hue, ey
   strokeWeight(0);
   rotate(rotation);
   fill(0);
-  blobCircles(circle1_size,  circle2_size, circle_distance, 0.5);
+  blobCircles(circle1_size,  circle2_size, circle_distance, 0.5, true);
   fill(hue, 300, 300);
-  blobCircles(circle1_size, circle2_size, circle_distance, 0);
+  blobCircles(circle1_size, circle2_size, circle_distance, 0, true);
+  fill(300);
+  blobCircles(circle1_size,  circle2_size, circle_distance, -1, false);
+  fill(0);
+  blobCircles(circle1_size,  circle2_size, circle_distance, -1.5, false);
 
   pop();
   
 }
 
-function blobCircles(circle1_size, circle2_size, circle_distance, circle_scale_offset) {
+function blobCircles(circle1_size, circle2_size, circle_distance, circle_scale_offset, draw_middle) {
   ellipseMode(RADIUS);
-  ellipse(0, 0, circle_distance/2 + circle_scale_offset);
-  ellipse(-circle_distance/2, 0, circle1_size + circle_scale_offset);
-  ellipse(circle_distance/2, 0, circle2_size + circle_scale_offset);
+  if(draw_middle) ellipse(0, 0, circle_distance + circle_scale_offset);
+  ellipse(-circle_distance, 0, circle1_size + circle_scale_offset);
+  ellipse(circle_distance, 0, circle2_size + circle_scale_offset);
 }
