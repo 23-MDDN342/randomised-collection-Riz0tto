@@ -56,7 +56,7 @@ function draw () {
       translate(x, y);
       scale(w/25, h/25);
 
-      blobFace(random(360), random(2, 4), random(2, 4), random(3, 5), random(300), 0, 0);
+      blobFace(random(-30, 30), random(2, 4), random(2, 4), random(4, 6), random(300), 0, 0);
       pop();
 
     }
