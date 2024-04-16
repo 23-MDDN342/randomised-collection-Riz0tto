@@ -15,13 +15,18 @@ function blobFace(rotation, circle1_size, circle2_size, circle_distance, hue, ey
   rotate(rotation);
   fill(20);
   blobCircles(circle1_size,  circle2_size, circle_distance, 0.5, true);
-  fill(hue, 200, 300);
+  fill(hue, 200, 280);
   blobCircles(circle1_size, circle2_size, circle_distance, 0, true);
   fill(300);
   blobCircles(circle1_size,  circle2_size, circle_distance, -0.5, false);
   fill(0);
   blobCircles(circle1_size,  circle2_size, circle_distance, -1, false);
+  pop();
 
+  push();
+  rotate(rotation);
+  fill(300);
+  arc(0, 2, 2.5, 2, 360, 180, CHORD);
   pop();
   
 }
