@@ -17,10 +17,10 @@ function setup () {
   main_canvas.parent('canvasContainer');
 
   // create sliders
-  slider1 = createSlider(0, 100, 50);
-  slider2 = createSlider(0, 100, 50);
-  slider3 = createSlider(0, 100, 50);
-  slider4 = createSlider(0, 100, 50);
+  slider1 = createSlider(0, 360, 0);
+  slider2 = createSlider(2, 8, 2);
+  slider3 = createSlider(2, 8, 2);
+  slider4 = createSlider(2, 8, 4);
   slider5 = createSlider(0, 100, 50);
   slider6 = createSlider(0, 100, 50);
   slider7 = createSlider(0, 100, 50);
@@ -54,6 +54,7 @@ function setup () {
 
 function draw () {
   strokeWeight(0.2);
+  angleMode(DEGREES);
 
   let mode = faceSelector.value();
 
@@ -84,11 +85,7 @@ function draw () {
 
   push();
   if (mode == '1') {
-   // draw face using values mapped from 3 sliders
-   let tilt_value = map(s1, 0, 100, -90, 90);
-   let mouth_value = map(s2, 0, 100, 0.5, 10);
-   let eye_value = int(map(s3, 0, 100, 1, 3));
-   orangeAlienFace(tilt_value, eye_value, mouth_value);
+   blobFace(s1, s2, s3, s4, s5, 0, 0);
   }
 
   if (mode == '2') {
