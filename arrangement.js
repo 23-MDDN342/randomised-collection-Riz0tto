@@ -8,8 +8,13 @@ let curRandomSeed = 0;
 let lastSwapTime = 0;
 const millisPerSwap = 3000;
 
-// global variables for colors
-const bg_color1 = [71, 222, 219];
+// circle generation variables
+var circles = [];
+var circleTryLimit = 5000; // circle try limit stops while loop
+var circleTries = 0;
+
+var circlePairs = [];
+
 
 function setup () {
   // create the drawing canvas, save the canvas element
@@ -20,14 +25,15 @@ function setup () {
 
   // rotation in degrees
   angleMode(DEGREES);
+
+  // ellipse mode
+  ellipseMode(RADIUS);
 }
 
 function changeRandomSeed() {
   curRandomSeed = curRandomSeed + 1;
   lastSwapTime = millis();
 }
-
-
 
 function mouseClicked() {
   changeRandomSeed();
@@ -41,39 +47,108 @@ function draw () {
   // reset the random number generator each time draw is called
   randomSeed(curRandomSeed);
 
-  // clear screen
-  background(bg_color1);
-  noStroke();
+  // clear screen - reset circle array so it doesn't persist
+  background(255);
+  circles = [];
+  circlePairs = [];
+  
+  generateRandomCircles();  
+  findCirclePairs();
+  
+}
 
-  // draw a 7x4 grid of faces
-  let w = canvasWidth / 7;
-  let h = canvasHeight / 4;
-  for(let i=0; i<4; i++) {
-    for(let j=0; j<7; j++) {
-      let y = h/2 + h*i;
-      let x = w/2 + w*j;
-     
-        // center face
-        let eye_value = int(random(2,4));
-        let tilt_value = random(-45, 45);
-        let mouth_value = random(3,4);
-        let is_cyclops = random(0, 100);
+// creates circles in random places on the canvas, with random radii, that don't overlap
+// lots of help from a Coding Train tutorial: https://www.youtube.com/watch?v=XATr_jdh-44&ab_channel=TheCodingTrain
+function generateRandomCircles() {
+  while (circles.length < 100 && circleTries < circleTryLimit) {
+    circleTries++; // limit while loop
 
-        if(is_cyclops < 10) {
-          eye_value = 1;
-          tilt_value = random(-5, 5);
-          mouth_value = random(0, 1.7);
-        }
+    var circle = { // circle object has x, y and radius
+      x: random(width),
+      y: random(height),
+      r: random(20, 60)  
+    };
 
-        push();
-        translate(x, y);
-        scale(w/25, h/25);
-        
-        orangeAlienFace(tilt_value, eye_value, mouth_value);
-        pop();
-      
-    }
+    // check if new circle overlaps any existing circles, adds it to the array if it doesn't
+    var overlapping = false;
+    for (var j = 0; j < circles.length; j++) {
+      var other = circles[j];
+      var d = dist(circle.x, circle.y, other.x, other.y);
+      if(d < other.r + circle.r) overlapping = true;
+    } 
+
+    if(!overlapping) circles.push(circle);
   }
+ 
+  // draw circles - this will be replaced by faces
+  for (var i = 0; i < circles.length; i++) {
+        fill(50, 50, 50, 50);
+        ellipse(circles[i].x, circles[i].y, circles[i].r)
+  }
+
+  circleTries = 0; // reset while loop limit
+}
+
+
+// finds the nearest neighbour of each circle to form circle pair objects
+function findCirclePairs() {
+  for (var i = 0; i < circles.length; i++) {
+    var closestCircleIndex = 0;
+
+    for (var j = 0; j < circles.length; j++) { // narrows down to the nearest circle that isn't itself
+      if(i != j){
+
+        var d = dist(circles[i].x, circles[i].y, circles[j].x, circles[j].y);
+
+        if(d < dist(circles[i].x, circles[i].y, circles[closestCircleIndex].x, circles[closestCircleIndex].y) || i == closestCircleIndex) {          
+          closestCircleIndex = j;
+        }
+      }      
+    }
+
+    var circlePair = { // circle pair object stores circle info for each circle in pair
+        x1: circles[i].x,
+        y1: circles[i].y,
+        r1: circles[i].r,
+        x2: circles[closestCircleIndex].x,
+        y2: circles[closestCircleIndex].y,
+        r2: circles[closestCircleIndex].r
+    };
+
+    circlePairs.push(circlePair);   
+
+  }
+
+  // cull shared pairs
+  while(true) {
+    var foundDupePair = false;
+    var dupePairIndex = 0;
+
+    for(var i = 0; i < circlePairs.length; i++) {        
+      for(var j = 0; j < circlePairs.length; j++) {
+        if(i != j && !foundDupePair){
+          var pair1 = circlePairs[i];
+          var pair2 = circlePairs[j];
+          if((pair1.x1 == pair2.x1 && pair1.y1 == pair2.y1) || (pair1.x2 == pair2.x2 && pair1.y2 == pair2.y2) || (pair1.x1 == pair2.x2 && pair1.y1 == pair2.y2) || (pair1.x2 == pair2.x1 && pair1.y2 == pair2.y1)) {
+            foundDupePair = true;
+            dupePairIndex = i;
+          }
+        }        
+      }        
+    }
+
+    if (foundDupePair) {
+      circlePairs.splice(dupePairIndex, 1);
+    } else break;
+  }
+
+  // draw lines between pairs - just for visualisation
+  strokeWeight(2);
+  for(var i = 0; i < circlePairs.length; i ++) {
+    var pair = circlePairs[i];
+    line(pair.x1, pair.y1, pair.x2, pair.y2);
+  }
+
 }
 
 function keyTyped() {
