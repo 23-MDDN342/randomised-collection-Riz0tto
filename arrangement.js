@@ -60,13 +60,14 @@ function draw () {
 // creates circles in random places on the canvas, with random radii, that don't overlap
 // lots of help from a Coding Train tutorial: https://www.youtube.com/watch?v=XATr_jdh-44&ab_channel=TheCodingTrain
 function generateRandomCircles() {
-  while (circles.length < 100 && circleTries < circleTryLimit) {
+  while (circles.length < 200 && circleTries < circleTryLimit) {
     circleTries++; // limit while loop
+    var maxRadius = map(circleTries, 0, circleTryLimit, 50, 20);
 
     var circle = { // circle object has x, y and radius
       x: random(width),
       y: random(height),
-      r: random(20, 60)  
+      r: random(20, maxRadius)  
     };
 
     // check if new circle overlaps any existing circles, adds it to the array if it doesn't
@@ -131,7 +132,7 @@ function findCirclePairs() {
           var pair2 = circlePairs[j];
           if((pair1.x1 == pair2.x1 && pair1.y1 == pair2.y1) || (pair1.x2 == pair2.x2 && pair1.y2 == pair2.y2) || (pair1.x1 == pair2.x2 && pair1.y1 == pair2.y2) || (pair1.x2 == pair2.x1 && pair1.y2 == pair2.y1)) {
             foundDupePair = true;
-            dupePairIndex = i;
+            dupePairIndex = j;
           }
         }        
       }        
