@@ -12,8 +12,10 @@ const millisPerSwap = 3000;
 var circles = [];
 var circleTryLimit = 5000; // circle try limit stops while loop
 var circleTries = 0;
-
 var circlePairs = [];
+
+// blobby face variables
+var eyeSizeFactor = 0.8;
 
 
 function setup () {
@@ -28,6 +30,10 @@ function setup () {
 
   // ellipse mode
   ellipseMode(RADIUS);
+
+  // colour mode
+  colorMode(HSB);
+
 }
 
 function changeRandomSeed() {
@@ -48,12 +54,30 @@ function draw () {
   randomSeed(curRandomSeed);
 
   // clear screen - reset circle array so it doesn't persist
-  background(255);
+  background(360, 30, 80);
   circles = [];
   circlePairs = [];
   
-  generateRandomCircles();  
+  generateRandomCircles();
+  
+  for (var i = 0; i < circles.length; i++) {
+    strokeWeight(width/200);
+    stroke(20);
+    fill(100);
+    ellipse(circles[i].x, circles[i].y, circles[i].r*eyeSizeFactor);
+    strokeWeight(0);
+    fill(20);
+    ellipse(circles[i].x, circles[i].y, circles[i].r*eyeSizeFactor*random(0.1, 0.8));
+    fill(100);
+    ellipse(circles[i].x-(circles[i].r/4), circles[i].y-(circles[i].r/4), circles[i].r*0.2);
+  }
+  
   findCirclePairs();
+
+  for (var i = 0; i < circlePairs.length; i++) {
+    var pair = circlePairs[i];
+    blobbyFace(pair.x1, pair.y1, pair.r1*eyeSizeFactor, pair.x2, pair.y2, pair.r2*eyeSizeFactor, random(360), 0, 0);
+  }
   
 }
 
@@ -62,12 +86,12 @@ function draw () {
 function generateRandomCircles() {
   while (circles.length < 200 && circleTries < circleTryLimit) {
     circleTries++; // limit while loop
-    var maxRadius = map(circleTries, 0, circleTryLimit, 50, 20);
+    var maxRadius = map(circleTries, 0, circleTryLimit, 50, 30);
 
     var circle = { // circle object has x, y and radius
       x: random(width),
       y: random(height),
-      r: random(20, maxRadius)  
+      r: random(30, maxRadius)  
     };
 
     // check if new circle overlaps any existing circles, adds it to the array if it doesn't
@@ -79,12 +103,6 @@ function generateRandomCircles() {
     } 
 
     if(!overlapping) circles.push(circle);
-  }
- 
-  // draw circles - this will be replaced by faces
-  for (var i = 0; i < circles.length; i++) {
-        fill(50, 50, 50, 50);
-        ellipse(circles[i].x, circles[i].y, circles[i].r)
   }
 
   circleTries = 0; // reset while loop limit
