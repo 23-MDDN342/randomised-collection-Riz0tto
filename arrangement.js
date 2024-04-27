@@ -34,11 +34,21 @@ function setup () {
   // colour mode
   colorMode(HSB);
 
+  background(0);
+
 }
 
 function changeRandomSeed() {
   curRandomSeed = curRandomSeed + 1;
   lastSwapTime = millis();
+  
+  // background
+  push();
+  rectMode(CORNERS);
+  strokeWeight(0);
+  fill(0, 0, 0, 0.8);
+  rect(0, 0, width, height);
+  pop();
 }
 
 function mouseClicked() {
@@ -47,14 +57,13 @@ function mouseClicked() {
 
 function draw () {
   if(millis() > lastSwapTime + millisPerSwap) {
-    changeRandomSeed();
+    changeRandomSeed();    
   }
 
   // reset the random number generator each time draw is called
   randomSeed(curRandomSeed);
 
-  // clear screen - reset circle array so it doesn't persist
-  background(100);
+  // reset circle array so it doesn't persist
   circles = [];
   circlePairs = [];
   
@@ -70,7 +79,7 @@ function draw () {
 
   for (var i = 0; i < circlePairs.length; i++) {
     var pair = circlePairs[i];
-    blobbyFace(pair.x1, pair.y1, pair.r1*eyeSizeFactor, pair.x2, pair.y2, pair.r2*eyeSizeFactor, random(360), int(random(0,3)), 0.6, color(50, 50, 50), 0);
+    blobbyFace(random([0, 1]), pair.x1, pair.y1, pair.r1*eyeSizeFactor, pair.x2, pair.y2, pair.r2*eyeSizeFactor, random(360), random([0, 1, 2]), 0.6, color(50, 50, 50), 0);
   }
   
 }

@@ -38,7 +38,7 @@
 //   ellipse(circle_distance, 0, circle2_size + circle_scale_offset);
 // }
 
-function blobbyFace(eye1_x, eye1_y, eye1_r, eye2_x, eye2_y, eye2_r, face_hue, eye_selection, pupil_ratio, iris_colour, mouth_selection) {
+function blobbyFace(face_type, eye1_x, eye1_y, eye1_r, eye2_x, eye2_y, eye2_r, face_hue, eye_selection, pupil_ratio, iris_colour, mouth_selection) {
   var head = 
   {
     x: min(eye1_x, eye2_x) + (abs(eye1_x - eye2_x)/2),
@@ -55,18 +55,38 @@ function blobbyFace(eye1_x, eye1_y, eye1_r, eye2_x, eye2_y, eye2_r, face_hue, ey
   push();
   colorMode(HSB);
   ellipseMode(RADIUS);
+  rectMode(CENTER);
   strokeWeight(0);
   
   // draw head with black outline
   let outlineOffset = width/200;
   
-  fill(20);
-  ellipse(eye1_x, eye1_y, eye1_r + outlineOffset);
-  ellipse(eye2_x, eye2_y, eye2_r + outlineOffset);
-  ellipse(head.x, head.y, head.r + outlineOffset);
+  if (face_type == 0) { // circular head
+    fill(20);
 
-  fill(face_hue, 60, 95);
-  ellipse(head.x, head.y, head.r); 
+    ellipse(eye1_x, eye1_y, eye1_r + outlineOffset);
+    ellipse(eye2_x, eye2_y, eye2_r + outlineOffset);
+    ellipse(head.x, head.y, head.r + outlineOffset);
+
+    fill(face_hue, 60, 95);
+
+    ellipse(head.x, head.y, head.r); 
+
+  } else if (face_type == 1) { // rectangular head
+    fill(20);
+
+    ellipse(eye1_x, eye1_y, eye1_r + outlineOffset);
+    ellipse(eye2_x, eye2_y, eye2_r + outlineOffset);
+
+    push();
+    rectMode(CENTER);
+    translate(head.x, head.y);
+    rotate(head_tilt)
+    rect(0, 0, head.r*2, min(eye1_r, eye2_r)*2 + outlineOffset*2);
+    fill(face_hue, 60, 95);
+    rect(0, 0, head.r*2, min(eye1_r, eye2_r)*2);
+    pop();
+  }
 
   // draw eyes
   drawEye(eye1_x, eye1_y, eye1_r, head_tilt, face_hue, eye_selection, pupil_ratio, iris_colour);
@@ -78,7 +98,7 @@ function blobbyFace(eye1_x, eye1_y, eye1_r, eye2_x, eye2_y, eye2_r, face_hue, ey
   translate(head.x, head.y);
   rotate(head_tilt); 
   strokeWeight(width/300);
-  line(-head.r/3, head.r/2, head.r/3, head.r/2);
+  line(-head.r/4, min(eye1_r, eye2_r)/1.5, head.r/4, min(eye1_r, eye2_r)/1.5);
   pop();
 
   pop();
