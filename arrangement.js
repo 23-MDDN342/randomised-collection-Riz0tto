@@ -15,7 +15,7 @@ var circleTries = 0;
 var circlePairs = [];
 
 // blobby face variables
-var eyeSizeFactor = 0.8;
+var eyeSizeFactor = 0.9;
 
 
 function setup () {
@@ -54,7 +54,7 @@ function draw () {
   randomSeed(curRandomSeed);
 
   // clear screen - reset circle array so it doesn't persist
-  background(360, 30, 80);
+  background(100);
   circles = [];
   circlePairs = [];
   
@@ -63,20 +63,14 @@ function draw () {
   for (var i = 0; i < circles.length; i++) {
     strokeWeight(width/200);
     stroke(20);
-    fill(100);
-    ellipse(circles[i].x, circles[i].y, circles[i].r*eyeSizeFactor);
-    strokeWeight(0);
-    fill(20);
-    ellipse(circles[i].x, circles[i].y, circles[i].r*eyeSizeFactor*random(0.1, 0.8));
-    fill(100);
-    ellipse(circles[i].x-(circles[i].r/4), circles[i].y-(circles[i].r/4), circles[i].r*0.2);
+    drawEye(circles[i].x, circles[i].y, circles[i].r*eyeSizeFactor, random(360), random(360), 0, 1, 0);
   }
   
   findCirclePairs();
 
   for (var i = 0; i < circlePairs.length; i++) {
     var pair = circlePairs[i];
-    blobbyFace(pair.x1, pair.y1, pair.r1*eyeSizeFactor, pair.x2, pair.y2, pair.r2*eyeSizeFactor, random(360), 0, 0);
+    blobbyFace(pair.x1, pair.y1, pair.r1*eyeSizeFactor, pair.x2, pair.y2, pair.r2*eyeSizeFactor, random(360), int(random(0,3)), 0.6, color(50, 50, 50), 0);
   }
   
 }
