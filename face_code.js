@@ -7,38 +7,7 @@
  * These functions are used by your final arrangement of faces as well as the face editor.
  */
 
-// function blobFace(rotation, circle1_size, circle2_size, circle_distance, hue, eye_selection, mouth_selection) {
-//   // blob circles
-//   push();
-//   colorMode(HSB);
-//   strokeWeight(0);
-//   rotate(rotation);
-//   fill(20);
-//   blobCircles(circle1_size,  circle2_size, circle_distance, 0.5, true);
-//   fill(hue, 255, 255);
-//   blobCircles(circle1_size, circle2_size, circle_distance, 0, true);
-//   fill(255);
-//   blobCircles(circle1_size,  circle2_size, circle_distance, -0.5, false);
-//   fill(0);
-//   blobCircles(circle1_size,  circle2_size, circle_distance, -1, false);
-//   pop();
-
-//   push();
-//   rotate(rotation);
-//   fill(255);
-//   arc(0, 2, 2.5, 2, 360, 180, CHORD);
-//   pop();
-  
-// }
-
-// function blobCircles(circle1_size, circle2_size, circle_distance, circle_scale_offset, draw_middle) {
-//   ellipseMode(RADIUS);
-//   if(draw_middle) ellipse(0, 0, circle_distance + circle_scale_offset);
-//   ellipse(-circle_distance, 0, circle1_size + circle_scale_offset);
-//   ellipse(circle_distance, 0, circle2_size + circle_scale_offset);
-// }
-
-function blobbyFace(face_type, eye1_x, eye1_y, eye1_r, eye2_x, eye2_y, eye2_r, face_hue, eye_selection, pupil_ratio, iris_colour, mouth_selection) {
+function blobbyFace(face_type, eye1_x, eye1_y, eye1_r, eye2_x, eye2_y, eye2_r, face_hue, eye_selection, pupil_ratio, iris_hue, mouth_selection) {
   var head = 
   {
     x: min(eye1_x, eye2_x) + (abs(eye1_x - eye2_x)/2),
@@ -59,14 +28,15 @@ function blobbyFace(face_type, eye1_x, eye1_y, eye1_r, eye2_x, eye2_y, eye2_r, f
   strokeWeight(0);
   
   // draw head with black outline
-  let outlineOffset = width/200;
+
+  var outline_offset = ((head.r + eye1_r + eye2_r) /20);
   
   if (face_type == 0) { // circular head
     fill(20);
 
-    ellipse(eye1_x, eye1_y, eye1_r + outlineOffset);
-    ellipse(eye2_x, eye2_y, eye2_r + outlineOffset);
-    ellipse(head.x, head.y, head.r + outlineOffset);
+    ellipse(eye1_x, eye1_y, eye1_r + outline_offset);
+    ellipse(eye2_x, eye2_y, eye2_r + outline_offset);
+    ellipse(head.x, head.y, head.r + outline_offset);
 
     fill(face_hue, 60, 95);
 
@@ -75,40 +45,40 @@ function blobbyFace(face_type, eye1_x, eye1_y, eye1_r, eye2_x, eye2_y, eye2_r, f
   } else if (face_type == 1) { // rectangular head
     fill(20);
 
-    ellipse(eye1_x, eye1_y, eye1_r + outlineOffset);
-    ellipse(eye2_x, eye2_y, eye2_r + outlineOffset);
+    ellipse(eye1_x, eye1_y, eye1_r + outline_offset);
+    ellipse(eye2_x, eye2_y, eye2_r + outline_offset);
 
     push();
     rectMode(CENTER);
     translate(head.x, head.y);
-    rotate(head_tilt)
-    rect(0, 0, head.r*2, min(eye1_r, eye2_r)*2 + outlineOffset*2);
+    rotate(head_tilt+45)
+    rect(0, 0, 1.5*head.r + outline_offset*2, 1.5*head.r + outline_offset*2, head.r/4);
     fill(face_hue, 60, 95);
-    rect(0, 0, head.r*2, min(eye1_r, eye2_r)*2);
+    rect(0, 0, 1.5*head.r, 1.5*head.r, head.r/4);
     pop();
   }
-
-  // draw eyes
-  drawEye(eye1_x, eye1_y, eye1_r, head_tilt, face_hue, eye_selection, pupil_ratio, iris_colour);
-  drawEye(eye2_x, eye2_y, eye2_r, head_tilt, face_hue, eye_selection, pupil_ratio, iris_colour);
-
   // draw mouth
 
   push();
   translate(head.x, head.y);
   rotate(head_tilt); 
-  strokeWeight(width/300);
+  strokeWeight(outline_offset);
   line(-head.r/4, min(eye1_r, eye2_r)/1.5, head.r/4, min(eye1_r, eye2_r)/1.5);
-  pop();
+  pop();  
+
+  // draw eyes
+
+  drawEye(eye1_x, eye1_y, eye1_r, head_tilt, face_hue, eye_selection, pupil_ratio, iris_hue);
+  drawEye(eye2_x, eye2_y, eye2_r, head_tilt, face_hue, eye_selection, pupil_ratio, iris_hue);
 
   pop();
 }
 
-function drawEye(eye_x, eye_y, eye_r, rotation, face_hue, eye_selection, pupil_ratio, iris_colour) { 
-  var eye_circle_colour = color(face_hue, 60, 100);
+function drawEye(eye_x, eye_y, eye_r, rotation, face_hue, eye_selection, pupil_ratio, iris_hue) { 
+  var eye_circle_colour = color(face_hue, 50, 100);
   var white_size = eye_r * 0.8; // amount of the eye space that the white takes up
   var iris_size = white_size * 0.8; // amount of the white of the eye that the iris takes up
-  var pupil_size = map(pupil_ratio, 0 , 1, 0, iris_size); // mapping pupil size from 0-1 to 0-iris-ratio, changes how much of the iris the pupil takes up
+  var pupil_size = map(pupil_ratio, 0 , 100, 0, iris_size); // mapping pupil size from 0-1 to 0-iris-ratio, changes how much of the iris the pupil takes up
  
 
   push();
@@ -130,7 +100,7 @@ function drawEye(eye_x, eye_y, eye_r, rotation, face_hue, eye_selection, pupil_r
 
   // iris
   strokeWeight(0);
-  fill(iris_colour);
+  fill(iris_hue, 50, 50);
   ellipse(0, 0, iris_size);
 
   // pupil
@@ -158,8 +128,8 @@ function drawEye(eye_x, eye_y, eye_r, rotation, face_hue, eye_selection, pupil_r
   else if(eye_selection == 2) { // squint eyelids
     strokeWeight(0);
     fill(eye_circle_colour)
-    arc(0, 0, eye_r, eye_r, 190, 350, OPEN);
-    arc(0, 0, eye_r, eye_r, 10, 170, OPEN);
+    arc(0, 0, eye_r, eye_r, 200, 340, OPEN);
+    arc(0, 0, eye_r, eye_r, 20, 160, OPEN);
   }
 
   pop();

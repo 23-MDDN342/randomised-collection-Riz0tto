@@ -7,6 +7,7 @@ const canvasHeight = 500;
 const bg_color = [71, 222, 219];
 let slider1, slider2, slider3, slider4, slider5;
 let slider6, slider7, slider8, slider9, slider10;
+let slider11, slider12;
 let faceSelector;
 let faceGuideCheckbox;
 
@@ -17,16 +18,19 @@ function setup () {
   main_canvas.parent('canvasContainer');
 
   // create sliders
-  slider1 = createSlider(0, 360, 0);
-  slider2 = createSlider(2, 8, 2);
-  slider3 = createSlider(2, 8, 2);
-  slider4 = createSlider(2, 8, 4);
-  slider5 = createSlider(0, 100, 50);
+  slider1 = createSlider(0, 1, 0);
+  slider2 = createSlider(0, 100, 0);
+  slider3 = createSlider(0, 100, 50);
+  slider4 = createSlider(0, 100, 50);
+  slider5 = createSlider(0, 100, 100);
   slider6 = createSlider(0, 100, 50);
   slider7 = createSlider(0, 100, 50);
-  slider8 = createSlider(0, 100, 50);
-  slider9 = createSlider(0, 100, 50);
+  slider8 = createSlider(0, 360, 0);
+  slider9 = createSlider(0, 2, 0);
   slider10 = createSlider(0, 100, 50);
+  slider11 = createSlider(0, 360, 50);
+  slider12 = createSlider(0, 3, 0);
+
 
   slider1.parent('slider1Container');
   slider2.parent('slider2Container');
@@ -38,6 +42,8 @@ function setup () {
   slider8.parent('slider8Container');
   slider9.parent('slider9Container');
   slider10.parent('slider10Container');
+  slider11.parent('slider11Container');
+  slider12.parent('slider12Container');
 
   faceGuideCheckbox = createCheckbox('', false);
   faceGuideCheckbox.parent('checkbox1Container');
@@ -70,6 +76,8 @@ function draw () {
   let s8 = slider8.value();
   let s9 = slider9.value();
   let s10 = slider10.value();
+  let s11 = slider11.value();
+  let s12 = slider12.value();
 
   let show_face_guide = faceGuideCheckbox.checked();
 
@@ -85,15 +93,18 @@ function draw () {
 
   push();
   if (mode == '1') {
-   blobFace(s1, s2, s3, s4, s5, 0, 0);
+    var eye1_x = map(s2, 0, 100, -5, 0);
+    var eye1_y = map(s3, 0, 100, -5, 5);
+    var eye1_size = map(s4, 0, 100, 3, 5);
+    var eye2_x = map(s5, 0, 100, 0, 5);
+    var eye2_y = map(s6, 0, 100, -5, 5);
+    var eye2_size = map(s7, 0, 100, 3, 5);
+    blobbyFace(s1, eye1_x, eye1_y, eye1_size, eye2_x, eye2_y, eye2_size, s8, s9, s10, s11, s12);
   }
 
   if (mode == '2') {
-     // let slider value 1 indicate thinness
-     blockyFace(s1);
   }
   if (mode == '3') {
-    simplePurpleFace();
   }
 
   pop();

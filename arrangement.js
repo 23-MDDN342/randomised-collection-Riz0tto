@@ -46,7 +46,7 @@ function changeRandomSeed() {
   push();
   rectMode(CORNERS);
   strokeWeight(0);
-  fill(0, 0, 0, 0.8);
+  fill(0, 0, 0, 0.7);
   rect(0, 0, width, height);
   pop();
 }
@@ -72,14 +72,14 @@ function draw () {
   for (var i = 0; i < circles.length; i++) {
     strokeWeight(width/200);
     stroke(20);
-    drawEye(circles[i].x, circles[i].y, circles[i].r*eyeSizeFactor, random(360), random(360), 0, 1, 0);
+    drawEye(circles[i].x, circles[i].y, circles[i].r*eyeSizeFactor, random(360), random(360), 0, 50, 0);
   }
   
   findCirclePairs();
 
   for (var i = 0; i < circlePairs.length; i++) {
     var pair = circlePairs[i];
-    blobbyFace(random([0, 1]), pair.x1, pair.y1, pair.r1*eyeSizeFactor, pair.x2, pair.y2, pair.r2*eyeSizeFactor, random(360), random([0, 1, 2]), 0.6, color(50, 50, 50), 0);
+    blobbyFace(random([0, 1]), pair.x1, pair.y1, pair.r1*eyeSizeFactor, pair.x2, pair.y2, pair.r2*eyeSizeFactor, random(360), random([0, 1, 2]), 50, 50, 0);
   }
   
 }
