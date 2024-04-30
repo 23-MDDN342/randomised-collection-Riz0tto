@@ -16,8 +16,6 @@ function blobbyFace(face_type, eye1_x, eye1_y, eye1_r, eye2_x, eye2_y, eye2_r, f
   };
 
   // finding the rotation of the head so facial features can be rotated with it, head rotation is based on the position of the eyes - it is not created and then rotated
-  var eye1_v = createVector(eye1_x, eye1_y);
-  var eye2_v = createVector(eye2_x, eye2_y);
   var head_tilt = atan2(eye2_y - eye1_y, eye2_x - eye1_x); // I used ChatGPT 3.5 to find this function atan2, the prompt was: "I need to get get the rotation between two points in p5.js"
   
 
@@ -42,28 +40,54 @@ function blobbyFace(face_type, eye1_x, eye1_y, eye1_r, eye2_x, eye2_y, eye2_r, f
 
     ellipse(head.x, head.y, head.r); 
 
-  } else if (face_type == 1) { // rectangular head
+  } else if (face_type == 1) { // diamond head
     fill(20);
 
     ellipse(eye1_x, eye1_y, eye1_r + outline_offset);
     ellipse(eye2_x, eye2_y, eye2_r + outline_offset);
 
     push();
+
     rectMode(CENTER);
     translate(head.x, head.y);
     rotate(head_tilt+45)
     rect(0, 0, 1.5*head.r + outline_offset*2, 1.5*head.r + outline_offset*2, head.r/4);
     fill(face_hue, 60, 95);
     rect(0, 0, 1.5*head.r, 1.5*head.r, head.r/4);
+
     pop();
   }
+
   // draw mouth
 
   push();
+
   translate(head.x, head.y);
   rotate(head_tilt); 
   strokeWeight(outline_offset);
-  line(-head.r/4, min(eye1_r, eye2_r)/1.5, head.r/4, min(eye1_r, eye2_r)/1.5);
+
+  if(mouth_selection == 0) { // straight mouth
+    line(-head.r/4, min(eye1_r, eye2_r)/1.5, head.r/4, min(eye1_r, eye2_r)/1.5);
+  } 
+  else if (mouth_selection == 1) { // wobbly mouth
+    beginShape();
+    curveVertex(-head.r, min(eye1_r, eye2_r)*1.5);
+    curveVertex(-head.r/4, min(eye1_r, eye2_r)/1.5);
+    curveVertex(0, min(eye1_r, eye2_r)/1.5);
+    curveVertex(head.r/4, min(eye1_r, eye2_r)/1.5);
+    curveVertex(head.r, min(eye1_r, eye2_r)*1.5);
+    endShape();
+  }
+  else if (mouth_selection == 2) { // smile mouth
+    beginShape();
+    curveVertex(-head.r/4, min(eye1_r, eye2_r)/2.5);
+    curveVertex(-head.r/4, min(eye1_r, eye2_r)/1.5);
+    curveVertex(0, min(eye1_r, eye2_r)/1.3);
+    curveVertex(head.r/4, min(eye1_r, eye2_r)/1.5);
+    curveVertex(head.r/4, min(eye1_r, eye2_r)/2.5);
+    endShape();
+  }
+
   pop();  
 
   // draw eyes

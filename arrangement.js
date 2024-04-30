@@ -3,20 +3,24 @@
  */
 const canvasWidth = 960;
 const canvasHeight = 500;
+// const canvasWidth = 2560;
+// const canvasHeight = 1440;
 let curRandomSeed = 0;
 
 let lastSwapTime = 0;
 const millisPerSwap = 3000;
 
-// circle generation variables
-var circles = [];
-var circleTryLimit = 5000; // circle try limit stops while loop
+// circle generation variables - these are the basis of the eyes which the faces are built around
+
+var maxNumCircles = 1000; // number of circles to try and place
+var circleTryLimit = 10000; // number of tries to place circles, stops while loop
+var circleScaleDivisor = 30; // how much to divide the canvas by to determine scale of circles
+var circleSizeVariance = 1.6; // max size difference between generated circles
+var circleSizeFactor = 0.7; // adjusts radius of generated circles - useful for preventing some overlap 
+
 var circleTries = 0;
+var circles = [];
 var circlePairs = [];
-
-// blobby face variables
-var eyeSizeFactor = 0.9;
-
 
 function setup () {
   // create the drawing canvas, save the canvas element
@@ -67,19 +71,32 @@ function draw () {
   circles = [];
   circlePairs = [];
   
+  // create random circles such that they don't overlap, this is the basis for the eyes and therefore the faces
   generateRandomCircles();
   
-  for (var i = 0; i < circles.length; i++) {
-    strokeWeight(width/200);
-    stroke(20);
-    drawEye(circles[i].x, circles[i].y, circles[i].r*eyeSizeFactor, random(360), random(360), 0, 50, 0);
-  }
-  
+  // find pairs of circles, these are connected to create faces with two eyes
   findCirclePairs();
 
+  // go through all the circle pairs and create faces using them
   for (var i = 0; i < circlePairs.length; i++) {
     var pair = circlePairs[i];
-    blobbyFace(random([0, 1]), pair.x1, pair.y1, pair.r1*eyeSizeFactor, pair.x2, pair.y2, pair.r2*eyeSizeFactor, random(360), random([0, 1, 2]), 50, 50, 0);
+
+    // face parameter randomisation
+
+    var face_type = random([0, 0, 1]); // face type - weighted random with 2/3 chance to be circular
+    var face_hue = random(360); // face hue - simple random in full hue spectrum
+    var mouth_selection = random([0, 1, 2, 2]); // mouth selection - weighted random with 1/4 chance to be neutral, 1/4 chance to be wobbly, 1/2 chance to be smiling
+    var eye_selection; // eye selection - conditional random
+    if(mouth_selection == 2) {
+      eye_selection = random([0, 0, 0, 1, 1, 2]); // if the mouth is a smile 1/2 chance to be wide eyed, 1/3 chance to be bored/sleepy, 1/6 chance to be squinty
+    } else {
+      eye_selection = random([0, 1, 2]); // even chance for each eye type if not smiling
+    }
+    var pupil_ratio = getAveragedRandom(10, 90, 2); // pupil ratio - averaged random between 10% and 90% of the white of the eye
+    var iris_hue = random(360); // iris hue - simple random in full hue spectrum
+
+    // draw the face using randomised parameters
+    blobbyFace(face_type, pair.x1, pair.y1, pair.r1*circleSizeFactor, pair.x2, pair.y2, pair.r2*circleSizeFactor, face_hue, eye_selection, pupil_ratio, iris_hue, mouth_selection);
   }
   
 }
@@ -87,14 +104,16 @@ function draw () {
 // creates circles in random places on the canvas, with random radii, that don't overlap
 // lots of help from a Coding Train tutorial: https://www.youtube.com/watch?v=XATr_jdh-44&ab_channel=TheCodingTrain
 function generateRandomCircles() {
-  while (circles.length < 200 && circleTries < circleTryLimit) {
+  var minCircleSize = width/circleScaleDivisor;
+  var maxCircleSize = minCircleSize*circleSizeVariance;
+
+  while (circles.length < maxNumCircles && circleTries < circleTryLimit) {
     circleTries++; // limit while loop
-    var maxRadius = map(circleTries, 0, circleTryLimit, 50, 30);
 
     var circle = { // circle object has x, y and radius
       x: random(width),
       y: random(height),
-      r: random(30, maxRadius)  
+      r: random(minCircleSize, maxCircleSize)  
     };
 
     // check if new circle overlaps any existing circles, adds it to the array if it doesn't
@@ -171,6 +190,19 @@ function findCirclePairs() {
     line(pair.x1, pair.y1, pair.x2, pair.y2);
   }
 
+}
+
+// returns an averaged random between two values, n being the number of random numbers averaged between
+// increasing n makes the average more average basically
+// this function was provided in class
+function getAveragedRandom(min, max, n) {  
+  let sum = 0;
+
+  for(let i = 0; i < n; i++) {
+    sum += random(min, max);
+  }
+
+  return sum/n;
 }
 
 function keyTyped() {

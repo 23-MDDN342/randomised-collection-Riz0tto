@@ -29,7 +29,7 @@ function setup () {
   slider9 = createSlider(0, 2, 0);
   slider10 = createSlider(0, 100, 50);
   slider11 = createSlider(0, 360, 50);
-  slider12 = createSlider(0, 3, 0);
+  slider12 = createSlider(0, 2, 0);
 
 
   slider1.parent('slider1Container');
