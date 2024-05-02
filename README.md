@@ -23,12 +23,15 @@ The next step, now that I had a canvas full of circles that didn't overlap, was 
 
 Each face has 12 parameters: face type, x and y positions of each eye, radius of each eye, face hue, eye and mouth selection, pupil ratio and iris hue. All of which are determined randomly in the arrangement.
 
+**Discrete:**
 - Face type - weighted random with 2/3 chance to be circular
-- Face hue - simple random in full hue spectrum
 - Mouth selection - weighted random with 1/4 chance to be neutral, 1/4 chance to be wobbly, 1/2 chance to be smiling
 - Eye selection - conditional random
  - if the mouth is a smile 1/2 chance to be wide eyed, 1/3 chance to be bored/sleepy, 1/6 chance to be squinty
  - even chance for each eye type if not smiling
+
+**Continuous:**
+- Face hue - simple random in full hue spectrum
 - Pupil ratio - averaged random between 10% and 90% of the white of the eye
 - Iris hue - simple random in full hue spectrum
 
