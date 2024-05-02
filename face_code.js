@@ -17,7 +17,6 @@ function blobbyFace(face_type, eye1_x, eye1_y, eye1_r, eye2_x, eye2_y, eye2_r, f
 
   // finding the rotation of the head so facial features can be rotated with it, head rotation is based on the position of the eyes - it is not created and then rotated
   var head_tilt = atan2(eye2_y - eye1_y, eye2_x - eye1_x); // I used ChatGPT 3.5 to find this function atan2, the prompt was: "I need to get get the rotation between two points in p5.js"
-  
 
   push();
   colorMode(HSB);
@@ -26,7 +25,6 @@ function blobbyFace(face_type, eye1_x, eye1_y, eye1_r, eye2_x, eye2_y, eye2_r, f
   strokeWeight(0);
   
   // draw head with black outline
-
   var outline_offset = ((head.r + eye1_r + eye2_r) /20);
   
   if (face_type == 0) { // circular head
@@ -59,7 +57,6 @@ function blobbyFace(face_type, eye1_x, eye1_y, eye1_r, eye2_x, eye2_y, eye2_r, f
   }
 
   // draw mouth
-
   push();
 
   translate(head.x, head.y);
@@ -91,7 +88,6 @@ function blobbyFace(face_type, eye1_x, eye1_y, eye1_r, eye2_x, eye2_y, eye2_r, f
   pop();  
 
   // draw eyes
-
   drawEye(eye1_x, eye1_y, eye1_r, head_tilt, face_hue, eye_selection, pupil_ratio, iris_hue);
   drawEye(eye2_x, eye2_y, eye2_r, head_tilt, face_hue, eye_selection, pupil_ratio, iris_hue);
 
@@ -103,7 +99,6 @@ function drawEye(eye_x, eye_y, eye_r, rotation, face_hue, eye_selection, pupil_r
   var white_size = eye_r * 0.8; // amount of the eye space that the white takes up
   var iris_size = white_size * 0.8; // amount of the white of the eye that the iris takes up
   var pupil_size = map(pupil_ratio, 0 , 100, 0, iris_size); // mapping pupil size from 0-1 to 0-iris-ratio, changes how much of the iris the pupil takes up
- 
 
   push();
 

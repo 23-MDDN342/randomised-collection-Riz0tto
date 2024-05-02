@@ -3,20 +3,20 @@
  */
 const canvasWidth = 960;
 const canvasHeight = 500;
-// const canvasWidth = 2560;
-// const canvasHeight = 1440;
 let curRandomSeed = 0;
 
 let lastSwapTime = 0;
 const millisPerSwap = 3000;
 
+var layer_opacity = 0.7; // opacity of the background drawn over each layer
+
 // circle generation variables - these are the basis of the eyes which the faces are built around
 
-var maxNumCircles = 1000; // number of circles to try and place
-var circleTryLimit = 10000; // number of tries to place circles, stops while loop
-var circleScaleDivisor = 30; // how much to divide the canvas by to determine scale of circles
+var maxNumCircles = 1000;     // number of circles to try and place
+var circleTryLimit = 10000;   // number of tries to place circles, stops while loop
+var circleScaleDivisor = 30;  // how much to divide the canvas by to determine scale of circles
 var circleSizeVariance = 1.6; // max size difference between generated circles
-var circleSizeFactor = 0.7; // adjusts radius of generated circles - useful for preventing some overlap 
+var circleSizeFactor = 0.7;   // adjusts radius of generated circles - useful for preventing some overlap 
 
 var circleTries = 0;
 var circles = [];
@@ -46,11 +46,11 @@ function changeRandomSeed() {
   curRandomSeed = curRandomSeed + 1;
   lastSwapTime = millis();
   
-  // background
+  // translucent background - creates stacking effect
   push();
   rectMode(CORNERS);
   strokeWeight(0);
-  fill(0, 0, 0, 0.7);
+  fill(0, 0, 0, layer_opacity);
   rect(0, 0, width, height);
   pop();
 }
@@ -182,14 +182,6 @@ function findCirclePairs() {
       circlePairs.splice(dupePairIndex, 1);
     } else break;
   }
-
-  // draw lines between pairs - just for visualisation
-  strokeWeight(2);
-  for(var i = 0; i < circlePairs.length; i ++) {
-    var pair = circlePairs[i];
-    line(pair.x1, pair.y1, pair.x2, pair.y2);
-  }
-
 }
 
 // returns an averaged random between two values, n being the number of random numbers averaged between
