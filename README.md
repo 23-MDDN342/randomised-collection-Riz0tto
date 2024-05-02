@@ -35,3 +35,8 @@ Each face has 12 parameters: face type, x and y positions of each eye, radius of
 - Pupil ratio - averaged random between 10% and 90% of the white of the eye
 - Iris hue - simple random in full hue spectrum
 
+## Use of AI:
+
+I generally don't use AI generally but there was one point where I needed help that I wasn't immediately able to find online. 
+
+The faces are generated based on the position of the eye circles in the arrangement, which means they are created with a rotation that I didn't set. In order for features to rotate with the faces I needed to find the rotation of the face. I wasn't sure how to get the rotation of a line drawn between two 2D coordinates. At first I tried using the angleBetween() function however it wasn't doing what I wanted. I used Chat GPT 3.5 with the prompt: "I need to get get the rotation between two points in p5.js" and it used the function atan2(). I'm sure I could have found this function on my own eventually but using AI to interpret what I wanted when I didn't quite know what I was looking for saved a lot of time. I didnt use it for anything else and copied no code other than the function.
