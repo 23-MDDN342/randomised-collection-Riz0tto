@@ -35,6 +35,8 @@ Each face has 12 parameters: face type, x and y positions of each eye, radius of
 - Pupil ratio - averaged random between 10% and 90% of the white of the eye
 - Iris hue - simple random in full hue spectrum
 
+The positions and radii are determined by the circle packing in the arrangement.
+
 ## Use of AI:
 
 I generally don't use AI generally but there was one point where I needed help that I wasn't immediately able to find online. 
